@@ -20,7 +20,7 @@
 #
 
 FROM java:openjdk-8-jre
-MAINTAINER Minoru Osuka "minoru.osuka@gmail.com"
+LABEL maintainer="Marco Moscher <info@moscher.de>"
 
 RUN apt-get update \
  && apt-get install -y tar ant jq \
@@ -39,19 +39,17 @@ ENV INSTALL_DIR=/opt
 RUN mkdir -p ${INSTALL_DIR}
 
 # Install Jetty
-ENV JETTY_VERSION 9.3.8.v20160314
+ENV JETTY_VERSION 9.4.12.v20180830
 WORKDIR ${INSTALL_DIR}
 RUN curl -L -o ${INSTALL_DIR}/jetty-distribution-${JETTY_VERSION}.tar.gz http://download.eclipse.org/jetty/${JETTY_VERSION}/dist/jetty-distribution-${JETTY_VERSION}.tar.gz
 RUN tar -xzf jetty-distribution-${JETTY_VERSION}.tar.gz && rm ${INSTALL_DIR}/jetty-distribution-${JETTY_VERSION}.tar.gz
 ENV JETTY_PREFIX ${INSTALL_DIR}/jetty-distribution-${JETTY_VERSION}
-RUN chown -R ${BANANA_USER}:${BANANA_GROUP} ${JETTY_PREFIX} 
+RUN chown -R ${BANANA_USER}:${BANANA_GROUP} ${JETTY_PREFIX}
 
 # Install Banana
-# ENV BANANA_VERSION release-1.6.0
-ENV BANANA_VERSION release
+ENV BANANA_VERSION v1.6.20
 WORKDIR ${INSTALL_DIR}
-# RUN curl -L -o ${INSTALL_DIR}/banana-${BANANA_VERSION}.zip https://github.com/lucidworks/banana/archive/${BANANA_VERSION}.zip
-RUN curl -L -o ${INSTALL_DIR}/banana-${BANANA_VERSION}.zip https://github.com/mosuka/banana/archive/${BANANA_VERSION}.zip
+RUN curl -L -o ${INSTALL_DIR}/banana-${BANANA_VERSION}.zip https://github.com/lucidworks/banana/archive/${BANANA_VERSION}.zip
 RUN unzip banana-${BANANA_VERSION}.zip && rm ${INSTALL_DIR}/banana-${BANANA_VERSION}.zip
 ENV BANANA_PREFIX ${INSTALL_DIR}/banana-${BANANA_VERSION}
 RUN chown -R ${BANANA_USER}:${BANANA_GROUP} ${BANANA_PREFIX}
